@@ -59,10 +59,10 @@ export const DishDetailModal = ({ item, isOpen, onClose }: DishDetailModalProps)
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 <div className="absolute bottom-10 left-10 right-10">
-                  <span className="bg-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full mb-4 inline-block shadow-lg leading-none">
+                  <span className="bg-amber-500 text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full mb-4 inline-block shadow-lg leading-none">
                     {item.category?.name || "Premium Dish"}
                   </span>
-                  <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-white leading-none">
+                  <h2 className="text-5xl md:text-6xl font-serif font-semibold tracking-tight text-white leading-none">
                     {item.name}
                   </h2>
                 </div>
@@ -71,24 +71,24 @@ export const DishDetailModal = ({ item, isOpen, onClose }: DishDetailModalProps)
               <div className="px-10 py-10 space-y-10">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 text-emerald-500 bg-emerald-50 px-4 py-2 rounded-2xl shadow-sm border border-emerald-100">
+                    <div className="flex items-center gap-1.5 text-amber-500 bg-amber-50 px-4 py-2 rounded-2xl shadow-sm border border-amber-100">
                       <Star size={18} fill="currentColor" />
-                      <span className="font-black text-base">4.9</span>
+                      <span className="font-serif font-semibold text-base">4.9</span>
                     </div>
                     <div className="flex items-center gap-2 text-zinc-400 bg-zinc-50 px-4 py-2 rounded-2xl border border-zinc-100 whitespace-nowrap">
                       <Clock size={16} />
                       <span className="font-bold uppercase tracking-widest text-[10px]">15-20 min</span>
                     </div>
                   </div>
-                  <div className="text-3xl md:text-4xl font-black text-emerald-500 tracking-tighter">
+                  <div className="text-3xl md:text-4xl font-serif font-semibold text-blue-950 tracking-tight">
                     ₹{item.price}
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-1 h-6 bg-emerald-500 rounded-full" />
-                    <h4 className="font-black text-zinc-900 uppercase tracking-[0.2em] text-xs">Chef's Description</h4>
+                    <div className="w-1 h-6 bg-amber-500 rounded-full" />
+                    <h4 className="font-serif font-semibold text-zinc-900 uppercase tracking-[0.2em] text-xs">Chef's Description</h4>
                   </div>
                   <p className="text-zinc-500 text-xl font-medium leading-relaxed italic opacity-90">
                     "{item.description || "Crafted with passion using hand-selected ingredients and traditional techniques to ensure an unforgettable dining experience."}"
@@ -97,7 +97,7 @@ export const DishDetailModal = ({ item, isOpen, onClose }: DishDetailModalProps)
 
                 <button
                   onClick={onClose}
-                  className="w-full bg-zinc-900 text-white py-6 rounded-[2.5rem] font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-2 hover:bg-emerald-500 transition-all duration-500 shadow-2xl active:scale-[0.98] mt-8"
+                  className="w-full bg-zinc-900 text-white py-6 rounded-[2.5rem] font-serif font-semibold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-2 hover:bg-blue-950 transition-all duration-500 shadow-2xl active:scale-[0.98] mt-8"
                 >
                   Explore More Dishes
                 </button>

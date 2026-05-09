@@ -40,11 +40,11 @@ export const DishCard = ({ item, index, onClick }: DishCardProps) => {
       <div className="flex-1 py-2 flex flex-col justify-between pr-4">
         <div className="space-y-1">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] leading-none mb-1">
+            <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] leading-none mb-1">
               {item.category?.name || "Featured"}
             </span>
           </div>
-          <h4 className="font-black text-xl text-zinc-900 group-hover:text-emerald-500 transition-colors leading-tight tracking-tight">
+          <h4 className="font-serif font-semibold text-xl text-zinc-900 group-hover:text-blue-950 transition-colors leading-tight tracking-tight">
             {item.name}
           </h4>
           <p className="text-zinc-400 text-sm font-medium line-clamp-2 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
@@ -52,7 +52,7 @@ export const DishCard = ({ item, index, onClick }: DishCardProps) => {
           </p>
         </div>
         <div className="flex items-center justify-between mt-3">
-          <div className="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-2xl text-lg font-black tracking-tighter border border-emerald-100/50 shadow-sm">
+          <div className="bg-blue-50 text-blue-950 px-4 py-1.5 rounded-2xl text-lg font-serif font-semibold tracking-tight border border-blue-100/50 shadow-sm">
             ₹{item.price}
           </div>
           <div className="w-10 h-10 bg-zinc-900 text-white rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0 shadow-lg">
