@@ -15,13 +15,25 @@ function MenuContent() {
   const { categories, menuItems, loading } = useMenu();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isVegMode, setIsVegMode] = useState(false);
   const [showItemDetail, setShowItemDetail] = useState<any>(null);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Recommendations logic
+  const recommendedCategories = categories.filter(cat => 
+    cat.name !== "All" && cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ).slice(0, 3);
+  
+  const recommendedDishes = menuItems.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ).slice(0, 5);
 
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "All" || item.category?._id === selectedCategory || item.category === selectedCategory || item.category?.name === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesDiet = isVegMode ? item.dietType === "veg" : true;
+    return matchesSearch && matchesCategory && matchesDiet;
   });
 
   const groupedItems = categories.filter(c => c.name !== "All").map(cat => ({
@@ -44,39 +56,129 @@ function MenuContent() {
               <p className="text-[10px] text-zinc-400 mt-2 uppercase tracking-[0.3em] font-black opacity-60">Digital Experience</p>
             </div>
           </div>
-          <button className="w-12 h-12 bg-zinc-50 rounded-2xl flex items-center justify-center border border-zinc-100 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-all active:scale-95">
-            <Info size={22} />
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Veg Mode Toggle */}
+            <button 
+              onClick={() => setIsVegMode(!isVegMode)} 
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-300", 
+                isVegMode ? "bg-green-50 border-green-200" : "bg-zinc-50 border-zinc-200"
+              )}
+            >
+              <div className={cn(
+                "w-8 h-4 rounded-full relative transition-colors duration-300 shadow-inner flex-shrink-0",
+                isVegMode ? "bg-green-500" : "bg-zinc-300"
+              )}>
+                <div className={cn(
+                  "w-3 h-3 bg-white rounded-full absolute top-[2px] transition-all duration-300 shadow-sm",
+                  isVegMode ? "left-[18px]" : "left-[2px]"
+                )} />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className={cn("w-1.5 h-1.5 rounded-full", isVegMode ? "bg-green-600" : "bg-zinc-400")} />
+                <span className={cn("text-[10px] font-black uppercase tracking-widest", isVegMode ? "text-green-700" : "text-zinc-500")}>Veg Only</span>
+              </div>
+            </button>
+            
+            <button className="w-10 h-10 bg-zinc-50 rounded-2xl flex items-center justify-center border border-zinc-100 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-all active:scale-95 hidden sm:flex">
+              <Info size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Search Input */}
-        <div className="relative group">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-300 group-focus-within:text-blue-950 transition-colors" size={24} />
+        <div className="relative group z-50">
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-300 group-focus-within:text-blue-950 transition-colors z-20 pointer-events-none" size={24} />
           <input
             type="text"
             placeholder="Search your craving..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-16 pr-6 py-5 bg-zinc-50 border-none rounded-[2rem] focus:ring-4 focus:ring-blue-950/10 focus:bg-white transition-all outline-none text-zinc-900 placeholder:text-zinc-300 font-bold text-lg shadow-inner"
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+            className="w-full pl-16 pr-6 py-5 bg-zinc-50 border-none rounded-[2rem] focus:ring-4 focus:ring-blue-950/10 focus:bg-white transition-all outline-none text-zinc-900 placeholder:text-zinc-300 font-bold text-lg shadow-inner relative z-10"
           />
+
+          {/* Recommendations Dropdown */}
+          {isSearchFocused && searchQuery.trim().length > 0 && (recommendedCategories.length > 0 || recommendedDishes.length > 0) && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[2rem] shadow-2xl border border-zinc-100 overflow-hidden animate-in fade-in slide-in-from-top-2 z-50">
+              <div className="max-h-[60vh] overflow-y-auto p-2 space-y-2">
+                
+                {recommendedCategories.length > 0 && (
+                  <div>
+                    <div className="px-4 py-2 text-[10px] font-black text-amber-500 uppercase tracking-widest">Categories</div>
+                    {recommendedCategories.map(cat => (
+                      <button
+                        key={cat._id}
+                        onClick={() => {
+                          setSelectedCategory(cat._id);
+                          setSearchQuery("");
+                          setIsSearchFocused(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-zinc-50 rounded-xl flex items-center gap-3 transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-amber-50 text-amber-500 rounded-lg flex items-center justify-center">
+                          <Search size={16} />
+                        </div>
+                        <span className="font-serif font-semibold text-zinc-900">{cat.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {recommendedDishes.length > 0 && (
+                  <div>
+                    <div className="px-4 py-2 text-[10px] font-black text-blue-950 uppercase tracking-widest border-t border-zinc-50 pt-4 mt-2">Dishes</div>
+                    {recommendedDishes.map(dish => (
+                      <button
+                        key={dish._id}
+                        onClick={() => {
+                          setShowItemDetail(dish);
+                          setSearchQuery("");
+                          setIsSearchFocused(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-zinc-50 rounded-xl flex items-center gap-3 transition-colors"
+                      >
+                        <div className="w-10 h-10 bg-zinc-100 rounded-lg overflow-hidden flex-shrink-0">
+                          {dish.image ? (
+                            <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-zinc-300">
+                              <UtensilsCrossed size={16} />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-serif font-semibold text-zinc-900 truncate">{dish.name}</div>
+                          <div className="text-xs text-zinc-400 font-medium truncate">{dish.category?.name || "Dish"}</div>
+                        </div>
+                        <div className="text-sm font-bold text-blue-950">₹{dish.price}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Categories Slider */}
-        <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2">
-          {categories.map((cat) => (
-            <button
-              key={cat._id}
-              onClick={() => setSelectedCategory(cat._id)}
-              className={cn(
-                "px-6 py-3 rounded-2xl whitespace-nowrap text-xs font-serif font-semibold uppercase tracking-widest transition-all border-2",
-                (selectedCategory === cat._id)
-                  ? "bg-zinc-900 text-white border-zinc-900 shadow-xl shadow-zinc-200"
-                  : "bg-white text-zinc-400 border-zinc-50 hover:bg-zinc-50 hover:border-zinc-100"
-              )}
-            >
-              {cat.name}
-            </button>
-          ))}
+        <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2 pt-2">
+            {categories.map((cat) => (
+              <button
+                key={cat._id}
+                onClick={() => setSelectedCategory(cat._id)}
+                className={cn(
+                  "px-6 py-3 rounded-2xl whitespace-nowrap text-xs font-serif font-semibold uppercase tracking-widest transition-all border-2",
+                  (selectedCategory === cat._id)
+                    ? "bg-zinc-900 text-white border-zinc-900 shadow-xl shadow-zinc-200"
+                    : "bg-white text-zinc-400 border-zinc-50 hover:bg-zinc-50 hover:border-zinc-100"
+                )}
+              >
+                {cat.name}
+              </button>
+            ))}
         </div>
       </div>
 

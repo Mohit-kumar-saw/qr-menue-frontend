@@ -42,8 +42,17 @@ export const DishCard = ({ item, index, onClick }: DishCardProps) => {
 
       <div className="flex-1 py-2 flex flex-col justify-between pr-4">
         <div className="space-y-1">
-          <div className="flex justify-between items-start">
-            <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] leading-none mb-1">
+          <div className="flex items-center gap-2 mb-1">
+            {item.dietType === "veg" ? (
+              <div className="w-3 h-3 border border-green-600 rounded-sm flex items-center justify-center flex-shrink-0" title="Vegetarian">
+                <div className="w-1.5 h-1.5 bg-green-600 rounded-full" />
+              </div>
+            ) : item.dietType === "non-veg" ? (
+              <div className="w-3 h-3 border border-red-600 rounded-sm flex items-center justify-center flex-shrink-0" title="Non-Vegetarian">
+                <div className="w-1.5 h-1.5 bg-red-600 rounded-full" />
+              </div>
+            ) : null}
+            <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] leading-none mt-0.5">
               {item.category?.name || "Featured"}
             </span>
           </div>

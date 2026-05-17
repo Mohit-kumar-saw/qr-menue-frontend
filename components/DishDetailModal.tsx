@@ -74,6 +74,17 @@ export const DishDetailModal = ({ item, isOpen, onClose }: DishDetailModalProps)
               <div className="px-10 py-10 space-y-10">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
+                    {item.dietType === "veg" ? (
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-100 rounded-xl">
+                        <div className="w-2.5 h-2.5 rounded-full bg-green-600" />
+                        <span className="text-xs font-black uppercase text-green-700 tracking-widest mt-0.5">Veg</span>
+                      </div>
+                    ) : item.dietType === "non-veg" ? (
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 border border-red-100 rounded-xl">
+                        <div className="w-2.5 h-2.5 rounded-full bg-red-600" />
+                        <span className="text-xs font-black uppercase text-red-700 tracking-widest mt-0.5">Non-Veg</span>
+                      </div>
+                    ) : null}
                     <div className="flex items-center gap-1.5 text-amber-500 bg-amber-50 px-4 py-2 rounded-2xl shadow-sm border border-amber-100">
                       <Star size={18} fill="currentColor" />
                       <span className="font-serif font-semibold text-base">4.9</span>
