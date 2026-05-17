@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, UtensilsCrossed } from "lucide-react";
+import { ArrowRight, UtensilsCrossed, Plus } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 interface DishCardProps {
   item: any;
@@ -11,6 +12,8 @@ interface DishCardProps {
 }
 
 export const DishCard = ({ item, index, onClick }: DishCardProps) => {
+  const { addToCart } = useCart();
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -55,8 +58,18 @@ export const DishCard = ({ item, index, onClick }: DishCardProps) => {
           <div className="bg-blue-50 text-blue-950 px-4 py-1.5 rounded-2xl text-lg font-serif font-semibold tracking-tight border border-blue-100/50 shadow-sm">
             ₹{item.price}
           </div>
-          <div className="w-10 h-10 bg-zinc-900 text-white rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0 shadow-lg">
-            <ArrowRight size={20} />
+          <div className="flex gap-2">
+            {item.isAvailable && (
+              <button 
+                onClick={(e) => { e.stopPropagation(); addToCart(item); }}
+                className="bg-zinc-900 text-white px-4 py-2 rounded-2xl text-sm font-semibold tracking-wide hover:bg-amber-500 transition-colors shadow-lg active:scale-95 flex items-center gap-1 z-10"
+              >
+                <Plus size={16} /> Add
+              </button>
+            )}
+            <div className="w-10 h-10 bg-zinc-900 text-white rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0 shadow-lg">
+              <ArrowRight size={20} />
+            </div>
           </div>
         </div>
       </div>

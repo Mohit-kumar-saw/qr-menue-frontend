@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Star, Clock, UtensilsCrossed } from "lucide-react";
+import { X, Star, Clock, UtensilsCrossed, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 interface DishDetailModalProps {
   item: any;
@@ -11,6 +12,8 @@ interface DishDetailModalProps {
 }
 
 export const DishDetailModal = ({ item, isOpen, onClose }: DishDetailModalProps) => {
+  const { addToCart } = useCart();
+  
   return (
     <AnimatePresence>
       {isOpen && item ? (
@@ -95,12 +98,22 @@ export const DishDetailModal = ({ item, isOpen, onClose }: DishDetailModalProps)
                   </p>
                 </div>
 
-                <button
-                  onClick={onClose}
-                  className="w-full bg-zinc-900 text-white py-6 rounded-[2.5rem] font-serif font-semibold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-2 hover:bg-blue-950 transition-all duration-500 shadow-2xl active:scale-[0.98] mt-8"
-                >
-                  Explore More Dishes
-                </button>
+                <div className="flex gap-4 mt-8">
+                  {item.isAvailable && (
+                    <button
+                      onClick={() => { addToCart(item); onClose(); }}
+                      className="flex-1 bg-amber-500 text-white py-6 rounded-[2.5rem] font-serif font-semibold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-2 hover:bg-amber-600 transition-all duration-500 shadow-2xl active:scale-[0.98]"
+                    >
+                      <ShoppingBag size={18} /> Add to Cart
+                    </button>
+                  )}
+                  <button
+                    onClick={onClose}
+                    className="flex-1 bg-zinc-900 text-white py-6 rounded-[2.5rem] font-serif font-semibold uppercase tracking-[0.2em] text-sm flex items-center justify-center hover:bg-blue-950 transition-all duration-500 shadow-2xl active:scale-[0.98]"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

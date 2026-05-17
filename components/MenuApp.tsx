@@ -7,6 +7,9 @@ import { cn } from "@/lib/utils";
 import { MenuProvider, useMenu } from "@/context/MenuContext";
 import { DishCard } from "@/components/DishCard";
 import { DishDetailModal } from "@/components/DishDetailModal";
+import { CartProvider } from "@/context/CartContext";
+import { CartFloatingButton } from "@/components/CartFloatingButton";
+import { CartModal } from "@/components/CartModal";
 
 function MenuContent() {
   const { categories, menuItems, loading } = useMenu();
@@ -153,14 +156,19 @@ function MenuContent() {
         isOpen={!!showItemDetail}
         onClose={() => setShowItemDetail(null)}
       />
+
+      <CartFloatingButton />
+      <CartModal />
     </div>
   );
 }
 
 export default function MenuApp() {
   return (
-    <MenuProvider>
-      <MenuContent />
-    </MenuProvider>
+    <CartProvider>
+      <MenuProvider>
+        <MenuContent />
+      </MenuProvider>
+    </CartProvider>
   );
 }
